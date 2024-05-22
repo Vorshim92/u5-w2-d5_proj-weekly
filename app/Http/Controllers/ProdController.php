@@ -20,7 +20,7 @@ class ProdController extends Controller
         return view('prods.show', compact('prod'));
     }
 
-    public function create(Request $request)
+    public function create()
     {
         return view('prods.create');
     }
@@ -40,16 +40,23 @@ class ProdController extends Controller
         return redirect()->route('prods.show', $prod->id);
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $prod = Prod::findOrFail($id);
+        if ($request->user()->id == $prod->user_id) {
+            abort(403);
+        }
         return view('prods.edit', compact('prod'));
     }
 
     public function update(Request $request, $id)
     {
+
         $data = $request->all();
         $prod = Prod::findOrFail($id);
+        if ($request->user()->id == $prod->user_id) {
+            abort(403);
+        }
         $prod->name = $data['name'];
         $prod->description = $data['description'];
         $prod->price = $data['price'];
@@ -58,9 +65,13 @@ class ProdController extends Controller
         return redirect()->route('prods.show', $prod->id);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+
         $prod = Prod::findOrFail($id);
+        if ($request->user()->id == $prod->user_id) {
+            abort(403);
+        }
         $prod->delete();
         return redirect()->route('prods.index');
     }
