@@ -12,17 +12,19 @@
                 <a href="{{ route('prods.show', $prod->id) }}" class="btn btn-primary">Go somewhere</a>
             @endif
             @auth
-                @if (Route::currentRouteName() == 'prods.show')
+                @if (Auth::user()->id == $prod->user_id)
+                    {{-- @if (Route::currentRouteName() == 'prods.show') --}}
                     <div class="flex gap-2">
                         <a href="{{ route('prods.edit', $prod->id) }}" class="btn btn-warning">EDIT</a>
                         <form method="POST" action="{{ route('prods.destroy', $prod->id) }}">
-
                             @csrf
                             @method('DELETE')
+
                             <button type="submit" class="btn btn-danger">DELETE</button>
                         </form>
                     </div>
                 @endif
+                {{-- @endif --}}
             @endauth
         </div>
     </div>

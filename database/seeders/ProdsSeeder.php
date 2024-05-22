@@ -19,6 +19,7 @@ class ProdsSeeder extends Seeder
                 'price' => $i * 100,
                 'quantity' => $i * 10,
                 'image' => 'https://picsum.photos/640/480',
+                'user_id' => 2,
             ]);
         }
     }

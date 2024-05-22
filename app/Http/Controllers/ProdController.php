@@ -36,6 +36,7 @@ class ProdController extends Controller
         $prod->price = $data['price'];
         $prod->quantity = $data['quantity'];
         $prod->image = "https://picsum.photos/640/480";
+        $prod->user_id = $request->user()->id;
         $prod->save();
         return redirect()->route('prods.show', $prod->id);
     }
@@ -43,8 +44,8 @@ class ProdController extends Controller
     public function edit(Request $request, $id)
     {
         $prod = Prod::findOrFail($id);
-        if ($request->user()->id == $prod->user_id) {
-            abort(403);
+        if ($request->user()->id != $prod->user_id) {
+            abort(401);
         }
         return view('prods.edit', compact('prod'));
     }
@@ -54,8 +55,8 @@ class ProdController extends Controller
 
         $data = $request->all();
         $prod = Prod::findOrFail($id);
-        if ($request->user()->id == $prod->user_id) {
-            abort(403);
+        if ($request->user()->id != $prod->user_id) {
+            abort(401);
         }
         $prod->name = $data['name'];
         $prod->description = $data['description'];
@@ -69,8 +70,8 @@ class ProdController extends Controller
     {
 
         $prod = Prod::findOrFail($id);
-        if ($request->user()->id == $prod->user_id) {
-            abort(403);
+        if ($request->user()->id != $prod->user_id) {
+            abort(401);
         }
         $prod->delete();
         return redirect()->route('prods.index');
